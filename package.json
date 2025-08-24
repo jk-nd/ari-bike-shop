@@ -1,0 +1,24 @@
+{
+  "name": "npl-init",
+  "version": "1.0.0",
+  "description": "Starter project intended to be a quick start for writing NPL and deploying it in an engine in DEV_MODE.",
+  "main": "automated_ui_test.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoumenaDigital/npl-init.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NoumenaDigital/npl-init/issues"
+  },
+  "homepage": "https://github.com/NoumenaDigital/npl-init#readme"
+}

@@ -1,5 +1,76 @@
-demo.HelloWorld:
-  innovator:
+bikeRental.Bike:
+  fleetManager:
+    set:
+      entity:
+        preferred_username:
+          - carol  # Fixed fleet manager
+      access:
+        role:
+          - payee
+  operator:
+    set:
+      entity:
+        preferred_username:
+          - alice  # Fixed operator
+      access:
+        preferred_username:
+          - alice
+  customer:
     extract:
       entity:
         - preferred_username
+      access:
+        - preferred_username
+    # Any authenticated user can be a customer
+
+bikeRental.BikeFleet:
+  fleetManager:
+    set:
+      entity:
+        preferred_username:
+          - carol
+      access:
+        role:
+          - payee
+  operator:
+    set:
+      entity:
+        preferred_username:
+          - alice
+      access:
+        preferred_username:
+          - alice
+
+bikeRental.RentalContract:
+  customer:
+    extract:
+      entity:
+        - preferred_username
+      access:
+        - preferred_username
+    # Any authenticated user can be a customer
+  operator:
+    set:
+      entity:
+        preferred_username:
+          - alice
+      access:
+        preferred_username:
+          - alice
+
+bikeRental.CustomerProfile:
+  customer:
+    extract:
+      entity:
+        - preferred_username
+      access:
+        - preferred_username
+    # Any authenticated user can be a customer
+  operator:
+    set:
+      entity:
+        preferred_username:
+          - alice
+      access:
+        preferred_username:
+          - alice

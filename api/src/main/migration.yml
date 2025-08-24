@@ -1,9 +1,8 @@
-$schema: https://documentation.noumenadigital.com/schemas/migration-schema-v2.yml
+systemUnderAudit: nplinit
 
 changesets:
   - name: 1.0.0
     changes:
       - migrate:
-          sources:
-          - npl
-          rules: rules/rules_1.0.0.yml
+        dir-list: npl
+        rules: rules/rules_1.0.0.yml

@@ -1,0 +1,84 @@
+package bikeRental;
+
+/**
+ * Protocol representing a customer profile in the bike rental system
+ * @param customerId Unique identifier for the customer
+ * @param email Email address of the customer
+ */
+@api
+protocol[customer, operator] CustomerProfile(
+    var customerId: Text,
+    var email: Text
+) {
+    require(customerId != "", "Customer ID cannot be empty");
+    require(email != "", "Email cannot be empty");
+    
+    initial state active;
+    final state suspended;
+
+    var totalRentals: Number = 0;
+    var loyaltyPoints: Number = 0;
+    var totalSpent: Number = 0;
+
+    /**
+     * Records a rental for the customer and awards loyalty points
+     * @return Confirmation message with updated rental count
+     */
+    @api
+    permission[operator] recordRental() returns Text | active {
+        totalRentals = totalRentals + 1;
+        loyaltyPoints = loyaltyPoints + 10;
+        return "Rental recorded for customer " + customerId + ". Total rentals: " + totalRentals.toText() + ", Loyalty points: " + loyaltyPoints.toText();
+    };
+
+    /**
+     * Records a rental with cost for the customer
+     * @param cost The cost of the rental
+     * @return Confirmation message with updated statistics
+     */
+    @api
+    permission[operator] recordRentalWithCost(cost: Number) returns Text | active {
+        require(cost >= 0, "Cost cannot be negative");
+        
+        totalRentals = totalRentals + 1;
+        totalSpent = totalSpent + cost;
+        loyaltyPoints = loyaltyPoints + 10;
+        return "Rental recorded for customer " + customerId + ". Total rentals: " + totalRentals.toText() + ", Total spent: $" + totalSpent.toText() + ", Loyalty points: " + loyaltyPoints.toText();
+    };
+
+    /**
+     * Gets the customer profile information
+     * @return Customer profile details including statistics
+     */
+    @api
+    permission[customer] getProfile() returns Text {
+        return "Customer: " + customerId + ", Email: " + email + ", Rentals: " + totalRentals.toText() + ", Points: " + loyaltyPoints.toText() + ", Total spent: $" + totalSpent.toText();
+    };
+
+    /**
+     * Suspends the customer account
+     * @return Confirmation message
+     */
+    @api
+    permission[operator] suspendCustomer() returns Text | active {
+        become suspended;
+        return "Customer " + customerId + " has been suspended";
+    };
+
+    /**
+     * Gets the customer's loyalty tier based on total spent
+     * @return The loyalty tier as text
+     */
+    @api
+    permission[customer | operator] getLoyaltyTier() returns Text {
+        if (totalSpent >= 1000) {
+            return "Gold";
+        } else if (totalSpent >= 500) {
+            return "Silver";
+        } else if (totalSpent >= 100) {
+            return "Bronze";
+        } else {
+            return "Standard";
+        };
+    };
+};

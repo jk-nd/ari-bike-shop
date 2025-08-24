@@ -1,0 +1,2216 @@
+openapi: 3.0.1
+info:
+  title: bikeRental
+  version: "1.0"
+servers:
+- url: http://localhost:12000
+security:
+- jwt: []
+paths:
+  /npl/bikeRental/-/openapi.json:
+    get:
+      operationId: _getOpenAPI
+      responses:
+        "200":
+          description: The OpenAPI spec
+          content:
+            application/json:
+              schema:
+                type: object
+      security: []
+  /npl/bikeRental/Bike/:
+    get:
+      operationId: _getBikeList
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 25
+      - name: includeCount
+        in: query
+        description: "Include `totalItems` and `totalPages` in the response if set.\
+          \ This option is very expensive, so should be avoided when possible."
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: All accessible protocol instances of this type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bike_List"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      operationId: _createBike
+      parameters:
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Bike_Create"
+        required: true
+      responses:
+        "200":
+          description: The new protocol instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bike"
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/:
+    get:
+      operationId: _getBikeByID
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: The protocol instance with this ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bike"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/assignToFleet:
+    post:
+      operationId: Bike_assignToFleet
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Bike_AssignToFleet_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/removeFromFleet:
+    post:
+      operationId: Bike_removeFromFleet
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/markAsRented:
+    post:
+      operationId: Bike_markAsRented
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Bike_MarkAsRented_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/markAsReturned:
+    post:
+      operationId: Bike_markAsReturned
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/putInMaintenance:
+    post:
+      operationId: Bike_putInMaintenance
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Bike_PutInMaintenance_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/completeMaintenance:
+    post:
+      operationId: Bike_completeMaintenance
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/retireBike:
+    post:
+      operationId: Bike_retireBike
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/getFleetId:
+    post:
+      operationId: Bike_getFleetId
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+                nullable: true
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/getCurrentRentalContract:
+    post:
+      operationId: Bike_getCurrentRentalContract
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+                nullable: true
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/isAvailableForRental:
+    post:
+      operationId: Bike_isAvailableForRental
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/reserveForRental:
+    post:
+      operationId: Bike_reserveForRental
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Bike_ReserveForRental_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/canBeRented:
+    post:
+      operationId: Bike_canBeRented
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/getBikeStatus:
+    post:
+      operationId: Bike_getBikeStatus
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/getBikeInfo:
+    post:
+      operationId: Bike_getBikeInfo
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/Bike/{id}/getBikeDetails:
+    post:
+      operationId: Bike_getBikeDetails
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/:
+    get:
+      operationId: _getBikeFleetList
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 25
+      - name: includeCount
+        in: query
+        description: "Include `totalItems` and `totalPages` in the response if set.\
+          \ This option is very expensive, so should be avoided when possible."
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: All accessible protocol instances of this type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BikeFleet_List"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      operationId: _createBikeFleet
+      parameters:
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BikeFleet_Create"
+        required: true
+      responses:
+        "200":
+          description: The new protocol instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BikeFleet"
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/:
+    get:
+      operationId: _getBikeFleetByID
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: The protocol instance with this ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BikeFleet"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/registerBike:
+    post:
+      operationId: BikeFleet_registerBike
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BikeFleet_RegisterBike_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/unregisterBike:
+    post:
+      operationId: BikeFleet_unregisterBike
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BikeFleet_UnregisterBike_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/recordRevenue:
+    post:
+      operationId: BikeFleet_recordRevenue
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BikeFleet_RecordRevenue_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/getFleetStatistics:
+    post:
+      operationId: BikeFleet_getFleetStatistics
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/getRegisteredBikes:
+    post:
+      operationId: BikeFleet_getRegisteredBikes
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/isBikeRegistered:
+    post:
+      operationId: BikeFleet_isBikeRegistered
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BikeFleet_IsBikeRegistered_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/getBikeCount:
+    post:
+      operationId: BikeFleet_getBikeCount
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: number
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/putFleetInMaintenance:
+    post:
+      operationId: BikeFleet_putFleetInMaintenance
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/restoreFleetFromMaintenance:
+    post:
+      operationId: BikeFleet_restoreFleetFromMaintenance
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/BikeFleet/{id}/decommissionFleet:
+    post:
+      operationId: BikeFleet_decommissionFleet
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/:
+    get:
+      operationId: _getCustomerProfileList
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 25
+      - name: includeCount
+        in: query
+        description: "Include `totalItems` and `totalPages` in the response if set.\
+          \ This option is very expensive, so should be avoided when possible."
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: All accessible protocol instances of this type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerProfile_List"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      operationId: _createCustomerProfile
+      parameters:
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerProfile_Create"
+        required: true
+      responses:
+        "200":
+          description: The new protocol instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerProfile"
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/{id}/:
+    get:
+      operationId: _getCustomerProfileByID
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: The protocol instance with this ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerProfile"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/{id}/recordRental:
+    post:
+      operationId: CustomerProfile_recordRental
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/{id}/recordRentalWithCost:
+    post:
+      operationId: CustomerProfile_recordRentalWithCost
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerProfile_RecordRentalWithCost_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/{id}/getProfile:
+    post:
+      operationId: CustomerProfile_getProfile
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/{id}/suspendCustomer:
+    post:
+      operationId: CustomerProfile_suspendCustomer
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/CustomerProfile/{id}/getLoyaltyTier:
+    post:
+      operationId: CustomerProfile_getLoyaltyTier
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/:
+    get:
+      operationId: _getRentalContractList
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 25
+      - name: includeCount
+        in: query
+        description: "Include `totalItems` and `totalPages` in the response if set.\
+          \ This option is very expensive, so should be avoided when possible."
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: All accessible protocol instances of this type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RentalContract_List"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+    post:
+      operationId: _createRentalContract
+      parameters:
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RentalContract_Create"
+        required: true
+      responses:
+        "200":
+          description: The new protocol instance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RentalContract"
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/:
+    get:
+      operationId: _getRentalContractByID
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: The protocol instance with this ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RentalContract"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/completeRental:
+    post:
+      operationId: RentalContract_completeRental
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/cancelRental:
+    post:
+      operationId: RentalContract_cancelRental
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RentalContract_CancelRental_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/getContractDetails:
+    post:
+      operationId: RentalContract_getContractDetails
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/getCurrentDuration:
+    post:
+      operationId: RentalContract_getCurrentDuration
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: number
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/getEstimatedCost:
+    post:
+      operationId: RentalContract_getEstimatedCost
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: number
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/validateBikeAvailability:
+    post:
+      operationId: RentalContract_validateBikeAvailability
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RentalContract_ValidateBikeAvailability_Command"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  /npl/bikeRental/RentalContract/{id}/markBikeAsRented:
+    post:
+      operationId: RentalContract_markBikeAsRented
+      parameters:
+      - $ref: "#/components/parameters/ProtocolID"
+      - $ref: "#/components/parameters/API_Version"
+      - $ref: "#/components/parameters/NPL_Tag"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+        "204":
+          description: No Content
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+components:
+  schemas:
+    _Party:
+      required:
+      - access
+      - entity
+      type: object
+      properties:
+        entity:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        access:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      example:
+        entity:
+          iss:
+          - https://example.com
+          organization:
+          - Example
+        access:
+          email:
+          - john.doe@example.com
+    _Period:
+      required:
+      - days
+      - months
+      - weeks
+      - years
+      type: object
+      properties:
+        days:
+          type: integer
+        weeks:
+          type: integer
+        months:
+          type: integer
+        years:
+          type: integer
+    _Error:
+      type: object
+      properties:
+        errorType:
+          type: string
+        id:
+          type: string
+          format: uuid
+        idType:
+          type: string
+        message:
+          type: string
+        error:
+          type: string
+          nullable: true
+        origin:
+          type: object
+          properties:
+            value:
+              type: string
+            code:
+              type: integer
+              format: int32
+            originType:
+              type: string
+            id:
+              type: string
+            message:
+              type: string
+          nullable: true
+        stackTrace:
+          type: string
+          nullable: true
+        clientStackTrace:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              protocolId:
+                type: string
+                format: uuid
+                nullable: true
+              elementType:
+                type: string
+              location:
+                type: object
+                properties:
+                  file:
+                    type: string
+                  line:
+                    type: integer
+                    format: int32
+                  sourceRef:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                      commit:
+                        type: string
+                    nullable: true
+            nullable: true
+    Bike:
+      required:
+      - '@actions'
+      - '@id'
+      - '@parties'
+      - '@state'
+      - bikeId
+      - currentRentalContractId
+      - fleetId
+      - location
+      - maintenanceNotes
+      - pricePerHour
+      type: object
+      properties:
+        '@id':
+          type: string
+          format: uuid
+        '@parties':
+          $ref: "#/components/schemas/Bike_Parties"
+        '@actions':
+          $ref: "#/components/schemas/Bike_Actions"
+        '@state':
+          $ref: "#/components/schemas/Bike_States"
+        currentRentalContractId:
+          type: string
+          nullable: true
+        fleetId:
+          type: string
+          nullable: true
+        maintenanceNotes:
+          type: string
+          nullable: true
+        bikeId:
+          type: string
+        location:
+          type: string
+        pricePerHour:
+          type: number
+      readOnly: true
+    Bike_Parties:
+      required:
+      - customer
+      - fleetManager
+      - operator
+      type: object
+      properties:
+        fleetManager:
+          $ref: "#/components/schemas/_Party"
+        operator:
+          $ref: "#/components/schemas/_Party"
+        customer:
+          $ref: "#/components/schemas/_Party"
+    Bike_Actions:
+      type: object
+      properties:
+        assignToFleet:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/assignToFleet
+        removeFromFleet:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/removeFromFleet
+        markAsRented:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/markAsRented
+        markAsReturned:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/markAsReturned
+        putInMaintenance:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/putInMaintenance
+        completeMaintenance:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/completeMaintenance
+        retireBike:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/retireBike
+        getFleetId:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getFleetId
+        getCurrentRentalContract:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getCurrentRentalContract
+        isAvailableForRental:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/isAvailableForRental
+        reserveForRental:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/reserveForRental
+        canBeRented:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/canBeRented
+        getBikeStatus:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getBikeStatus
+        getBikeInfo:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getBikeInfo
+        getBikeDetails:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getBikeDetails
+    Bike_List:
+      required:
+      - items
+      type: object
+      properties:
+        '@prev':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/?page=1&pageSize=10
+        '@next':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/Bike/?page=3&pageSize=10
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Bike"
+        page:
+          type: integer
+        totalItems:
+          type: integer
+          description: Total number of accessible protocol instances. Only included
+            if the `includeCount` query parameter was set.
+          nullable: true
+        totalPages:
+          type: integer
+          description: Total number of accessible pages. Only included if the `includeCount`
+            query parameter was set.
+          nullable: true
+    Bike_Create:
+      required:
+      - '@parties'
+      - bikeId
+      - location
+      - pricePerHour
+      type: object
+      properties:
+        bikeId:
+          type: string
+        location:
+          type: string
+        pricePerHour:
+          type: number
+        '@parties':
+          $ref: "#/components/schemas/Bike_Parties"
+    Bike_States:
+      type: string
+      enum:
+      - available
+      - rented
+      - maintenance
+      - retired
+    Bike_AssignToFleet_Command:
+      required:
+      - fleetIdentifier
+      type: object
+      properties:
+        fleetIdentifier:
+          type: string
+    Bike_MarkAsRented_Command:
+      required:
+      - rentalContractId
+      type: object
+      properties:
+        rentalContractId:
+          type: string
+    Bike_PutInMaintenance_Command:
+      required:
+      - notes
+      type: object
+      properties:
+        notes:
+          type: string
+    Bike_ReserveForRental_Command:
+      required:
+      - rentalContractId
+      type: object
+      properties:
+        rentalContractId:
+          type: string
+    BikeFleet:
+      required:
+      - '@actions'
+      - '@id'
+      - '@parties'
+      - '@state'
+      - fleetId
+      - locationName
+      - maxCapacity
+      - registeredBikes
+      - totalRentals
+      - totalRevenue
+      type: object
+      properties:
+        '@id':
+          type: string
+          format: uuid
+        '@parties':
+          $ref: "#/components/schemas/BikeFleet_Parties"
+        '@actions':
+          $ref: "#/components/schemas/BikeFleet_Actions"
+        '@state':
+          $ref: "#/components/schemas/BikeFleet_States"
+        registeredBikes:
+          type: array
+          items:
+            type: string
+        totalRevenue:
+          type: number
+        totalRentals:
+          type: number
+        fleetId:
+          type: string
+        locationName:
+          type: string
+        maxCapacity:
+          type: number
+      readOnly: true
+    BikeFleet_Parties:
+      required:
+      - fleetManager
+      - operator
+      type: object
+      properties:
+        fleetManager:
+          $ref: "#/components/schemas/_Party"
+        operator:
+          $ref: "#/components/schemas/_Party"
+    BikeFleet_Actions:
+      type: object
+      properties:
+        registerBike:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/registerBike
+        unregisterBike:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/unregisterBike
+        recordRevenue:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/recordRevenue
+        getFleetStatistics:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getFleetStatistics
+        getRegisteredBikes:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getRegisteredBikes
+        isBikeRegistered:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/isBikeRegistered
+        getBikeCount:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getBikeCount
+        putFleetInMaintenance:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/putFleetInMaintenance
+        restoreFleetFromMaintenance:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/restoreFleetFromMaintenance
+        decommissionFleet:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/decommissionFleet
+    BikeFleet_List:
+      required:
+      - items
+      type: object
+      properties:
+        '@prev':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/?page=1&pageSize=10
+        '@next':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/BikeFleet/?page=3&pageSize=10
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BikeFleet"
+        page:
+          type: integer
+        totalItems:
+          type: integer
+          description: Total number of accessible protocol instances. Only included
+            if the `includeCount` query parameter was set.
+          nullable: true
+        totalPages:
+          type: integer
+          description: Total number of accessible pages. Only included if the `includeCount`
+            query parameter was set.
+          nullable: true
+    BikeFleet_Create:
+      required:
+      - '@parties'
+      - fleetId
+      - locationName
+      - maxCapacity
+      type: object
+      properties:
+        fleetId:
+          type: string
+        locationName:
+          type: string
+        maxCapacity:
+          type: number
+        '@parties':
+          $ref: "#/components/schemas/BikeFleet_Parties"
+    BikeFleet_States:
+      type: string
+      enum:
+      - active
+      - maintenance
+      - decommissioned
+    BikeFleet_RegisterBike_Command:
+      required:
+      - bikeId
+      type: object
+      properties:
+        bikeId:
+          type: string
+    BikeFleet_UnregisterBike_Command:
+      required:
+      - bikeId
+      type: object
+      properties:
+        bikeId:
+          type: string
+    BikeFleet_RecordRevenue_Command:
+      required:
+      - amount
+      type: object
+      properties:
+        amount:
+          type: number
+    BikeFleet_IsBikeRegistered_Command:
+      required:
+      - bikeId
+      type: object
+      properties:
+        bikeId:
+          type: string
+    CustomerProfile:
+      required:
+      - '@actions'
+      - '@id'
+      - '@parties'
+      - '@state'
+      - customerId
+      - email
+      - loyaltyPoints
+      - totalRentals
+      - totalSpent
+      type: object
+      properties:
+        '@id':
+          type: string
+          format: uuid
+        '@parties':
+          $ref: "#/components/schemas/CustomerProfile_Parties"
+        '@actions':
+          $ref: "#/components/schemas/CustomerProfile_Actions"
+        '@state':
+          $ref: "#/components/schemas/CustomerProfile_States"
+        totalRentals:
+          type: number
+        loyaltyPoints:
+          type: number
+        totalSpent:
+          type: number
+        customerId:
+          type: string
+        email:
+          type: string
+      readOnly: true
+    CustomerProfile_Parties:
+      required:
+      - customer
+      - operator
+      type: object
+      properties:
+        customer:
+          $ref: "#/components/schemas/_Party"
+        operator:
+          $ref: "#/components/schemas/_Party"
+    CustomerProfile_Actions:
+      type: object
+      properties:
+        recordRental:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/recordRental
+        recordRentalWithCost:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/recordRentalWithCost
+        getProfile:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getProfile
+        suspendCustomer:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/suspendCustomer
+        getLoyaltyTier:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getLoyaltyTier
+    CustomerProfile_List:
+      required:
+      - items
+      type: object
+      properties:
+        '@prev':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/?page=1&pageSize=10
+        '@next':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/CustomerProfile/?page=3&pageSize=10
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomerProfile"
+        page:
+          type: integer
+        totalItems:
+          type: integer
+          description: Total number of accessible protocol instances. Only included
+            if the `includeCount` query parameter was set.
+          nullable: true
+        totalPages:
+          type: integer
+          description: Total number of accessible pages. Only included if the `includeCount`
+            query parameter was set.
+          nullable: true
+    CustomerProfile_Create:
+      required:
+      - '@parties'
+      - customerId
+      - email
+      type: object
+      properties:
+        customerId:
+          type: string
+        email:
+          type: string
+        '@parties':
+          $ref: "#/components/schemas/CustomerProfile_Parties"
+    CustomerProfile_States:
+      type: string
+      enum:
+      - active
+      - suspended
+    CustomerProfile_RecordRentalWithCost_Command:
+      required:
+      - cost
+      type: object
+      properties:
+        cost:
+          type: number
+    RentalContract:
+      required:
+      - '@actions'
+      - '@id'
+      - '@parties'
+      - '@state'
+      - bikeId
+      - contractId
+      - customerId
+      - endTime
+      - hourlyRate
+      - paymentStatus
+      - startTime
+      - totalCost
+      type: object
+      properties:
+        '@id':
+          type: string
+          format: uuid
+        '@parties':
+          $ref: "#/components/schemas/RentalContract_Parties"
+        '@actions':
+          $ref: "#/components/schemas/RentalContract_Actions"
+        '@state':
+          $ref: "#/components/schemas/RentalContract_States"
+        startTime:
+          type: string
+          format: zoned-date-time
+          example: "2006-01-02T15:04:05.999+01:00[Europe/Zurich]"
+        endTime:
+          type: string
+          format: zoned-date-time
+          nullable: true
+          example: "2006-01-02T15:04:05.999+01:00[Europe/Zurich]"
+        totalCost:
+          type: number
+        paymentStatus:
+          type: string
+        contractId:
+          type: string
+        bikeId:
+          type: string
+        customerId:
+          type: string
+        hourlyRate:
+          type: number
+      readOnly: true
+    RentalContract_Parties:
+      required:
+      - customer
+      - operator
+      type: object
+      properties:
+        customer:
+          $ref: "#/components/schemas/_Party"
+        operator:
+          $ref: "#/components/schemas/_Party"
+    RentalContract_Actions:
+      type: object
+      properties:
+        completeRental:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/completeRental
+        cancelRental:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/cancelRental
+        getContractDetails:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getContractDetails
+        getCurrentDuration:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getCurrentDuration
+        getEstimatedCost:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/getEstimatedCost
+        validateBikeAvailability:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/validateBikeAvailability
+        markBikeAsRented:
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/1ee39a43-8e4e-4b3b-8f1f-1e11ad495436/markBikeAsRented
+    RentalContract_List:
+      required:
+      - items
+      type: object
+      properties:
+        '@prev':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/?page=1&pageSize=10
+        '@next':
+          type: string
+          format: uri
+          example: http://localhost:12000/npl/bikeRental/RentalContract/?page=3&pageSize=10
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/RentalContract"
+        page:
+          type: integer
+        totalItems:
+          type: integer
+          description: Total number of accessible protocol instances. Only included
+            if the `includeCount` query parameter was set.
+          nullable: true
+        totalPages:
+          type: integer
+          description: Total number of accessible pages. Only included if the `includeCount`
+            query parameter was set.
+          nullable: true
+    RentalContract_Create:
+      required:
+      - '@parties'
+      - bikeId
+      - contractId
+      - customerId
+      - hourlyRate
+      type: object
+      properties:
+        contractId:
+          type: string
+        bikeId:
+          type: string
+        customerId:
+          type: string
+        hourlyRate:
+          type: number
+        '@parties':
+          $ref: "#/components/schemas/RentalContract_Parties"
+    RentalContract_States:
+      type: string
+      enum:
+      - active
+      - completed
+      - cancelled
+    RentalContract_CancelRental_Command:
+      required:
+      - reason
+      type: object
+      properties:
+        reason:
+          type: string
+    RentalContract_ValidateBikeAvailability_Command:
+      required:
+      - bikeIdToCheck
+      type: object
+      properties:
+        bikeIdToCheck:
+          type: string
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_Error"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_Error"
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_Error"
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_Error"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_Error"
+  parameters:
+    API_Version:
+      name: X-NPL-API
+      in: header
+      description: Optional parameter to require a specific API version
+      required: false
+      schema:
+        type: string
+    NPL_Tag:
+      name: X-NPL-TAG
+      in: header
+      description: Optional parameter to require a specific NPL Tag
+      required: false
+      schema:
+        type: string
+    ProtocolID:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

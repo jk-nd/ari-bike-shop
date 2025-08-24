@@ -38,22 +38,36 @@ Fetch a token from the embedded OIDC server with
 export ACCESS_TOKEN=$(curl -s -X POST http://localhost:11000/token -d "grant_type=password" -d "username=alice" -d "password=password123" | jq -r .access_token)
 ```
 
-and interact with the engine to create a hello world protocol:
+and interact with the engine to create a bike:
 
 ```shell
-curl -X POST -H 'accept: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" -d '{ "@parties": {}}' http://localhost:12000/npl/demo/HelloWorld/
+curl -X POST -H 'accept: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" -d '{
+  "bikeId": "bike-001",
+  "location": "Downtown Station",
+  "pricePerHour": 5.99,
+  "@parties": {
+    "operator": {
+      "entity": { "preferred_username": ["alice"] },
+      "access": {}
+    },
+    "renter": {
+      "entity": { "preferred_username": ["*"] },
+      "access": {}
+    }
+  }
+}' http://localhost:12000/npl/bikeRental/Bike/
 ```
 
-Say hello (replace the instance ID with the one you got from the previous command):
+List all bikes:
 
 ```shell
-curl -X POST -H 'accept: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:12000/npl/demo/HelloWorld/{instanceId}/sayHello
+curl -X GET -H 'accept: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:12000/npl/bikeRental/Bike/
 ```
 
-and examine the resulting state of the protocol instance:
+and examine the resulting state of the bike instances:
 
 ```shell
-curl -X GET -H 'accept: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:12000/npl/demo/HelloWorld/
+curl -X GET -H 'accept: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost:12000/npl/bikeRental/Bike/{bikeId}/
 ```
 
 ## Support
