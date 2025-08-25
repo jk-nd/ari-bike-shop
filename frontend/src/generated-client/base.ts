@@ -19,7 +19,17 @@ import type { Configuration } from './configuration';
 import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 
-export const BASE_PATH = "http://localhost:12000".replace(/\/+$/, "");
+// Dynamic base path based on environment
+const getBasePath = () => {
+  if (typeof window !== 'undefined' && window.location.hostname.includes('noumena.cloud')) {
+    const parts = window.location.hostname.split('.')
+    const tenantApp = parts[0]
+    return `https://${tenantApp}.noumena.cloud`
+  }
+  return "http://localhost:12000"
+}
+
+export const BASE_PATH = getBasePath().replace(/\/+$/, "");
 
 export const COLLECTION_FORMATS = {
     csv: ",",

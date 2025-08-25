@@ -1,9 +1,10 @@
 import { DefaultApi, Configuration } from '../generated-client'
+import { environment } from '../config/environment'
 
 // API client configuration
 const createApiClient = (accessToken?: string) => {
   const configuration = new Configuration({
-    basePath: 'http://localhost:12000', // NPL Runtime engine URL
+    basePath: environment.apiBaseUrl, // Use environment-specific API URL
     accessToken: accessToken
   })
   
@@ -267,23 +268,61 @@ export const rentalApi = {
 export const authApi = {
   // Get OIDC token
   getToken: async (username: string, password: string) => {
-    const response = await fetch('http://localhost:11000/token', {
+    // Try without client_id first for public clients
+    const params = new URLSearchParams({
+      grant_type: 'password',
+      username: username,
+      password: password
+    })
+
+    console.log('Attempting authentication with URL:', environment.authUrl)
+    console.log('Request parameters:', Object.fromEntries(params))
+
+    const response = await fetch(environment.authUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({
-        grant_type: 'password',
-        username: username,
-        password: password
-      })
+      body: params
     })
 
+    console.log('Authentication response status:', response.status)
+
     if (!response.ok) {
-      throw new Error('Authentication failed')
+      const errorText = await response.text()
+      console.error('Authentication error response:', errorText)
+      
+      // If it fails without client_id, try with client_id
+      if (errorText.includes('invalid_client')) {
+        console.log('Trying with client_id...')
+        params.append('client_id', 'test3delete')
+        
+        const response2 = await fetch(environment.authUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params
+        })
+        
+        console.log('Authentication response status (with client_id):', response2.status)
+        
+        if (!response2.ok) {
+          const errorText2 = await response2.text()
+          console.error('Authentication error response (with client_id):', errorText2)
+          throw new Error(`Authentication failed: ${response2.status} ${response2.statusText}`)
+        }
+        
+        const data2 = await response2.json()
+        console.log('Authentication successful with client_id, token received')
+        return data2.access_token
+      }
+      
+      throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
     }
 
     const data = await response.json()
+    console.log('Authentication successful without client_id, token received')
     return data.access_token
   }
 }

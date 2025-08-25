@@ -1,0 +1,139 @@
+package bikeRental;
+
+/**
+ * Protocol representing a fleet of bikes at a specific location
+ * @param fleetId Unique identifier for the fleet
+ * @param locationName The name/location of the fleet
+ * @param maxCapacity Maximum number of bikes this fleet can hold
+ */
+@api
+protocol[fleetManager, operator] BikeFleet(
+    var fleetId: Text,
+    var locationName: Text,
+    var maxCapacity: Number
+) {
+    require(fleetId != "", "Fleet ID cannot be empty");
+    require(locationName != "", "Location name cannot be empty");
+    require(maxCapacity > 0, "Maximum capacity must be positive");
+    
+    initial state active;
+    state maintenance;
+    final state decommissioned;
+
+    var registeredBikes: List<Text> = listOf<Text>();
+    var totalRevenue: Number = 0;
+    var totalRentals: Number = 0;
+
+    /**
+     * Registers a bike to this fleet
+     * @param bikeId The bike identifier to register
+     * @return Confirmation message with updated bike count
+     */
+    @api
+    permission[fleetManager] registerBike(bikeId: Text) returns Text | active, maintenance {
+        require(bikeId != "", "Bike ID cannot be empty");
+        require(!registeredBikes.contains(bikeId), "Bike already registered");
+        require(registeredBikes.size() < maxCapacity, "Fleet is at maximum capacity");
+        
+        registeredBikes = registeredBikes.with(bikeId);
+        return "Bike " + bikeId + " registered to fleet " + fleetId + " at " + locationName + ". Total bikes: " + registeredBikes.size().toText();
+    };
+
+    /**
+     * Unregisters a bike from this fleet
+     * @param bikeId The bike identifier to unregister
+     * @return Confirmation message with updated bike count
+     */
+    @api
+    permission[fleetManager] unregisterBike(bikeId: Text) returns Text | active, maintenance {
+        require(bikeId != "", "Bike ID cannot be empty");
+        require(registeredBikes.contains(bikeId), "Bike not registered in this fleet");
+        
+        registeredBikes = registeredBikes.without(bikeId);
+        return "Bike " + bikeId + " unregistered from fleet " + fleetId + ". Total bikes: " + registeredBikes.size().toText();
+    };
+
+    /**
+     * Records revenue from a rental
+     * @param amount The revenue amount to add
+     * @return Confirmation message with updated total revenue
+     */
+    @api
+    permission[operator] recordRevenue(amount: Number) returns Text | active {
+        require(amount > 0, "Revenue amount must be positive");
+        
+        totalRevenue = totalRevenue + amount;
+        totalRentals = totalRentals + 1;
+        return "Revenue recorded: $" + amount.toText() + ". Total revenue: $" + totalRevenue.toText() + ", Total rentals: " + totalRentals.toText();
+    };
+
+    /**
+     * Gets fleet statistics including bike count and revenue
+     * @return Fleet statistics as text
+     */
+    @api
+    permission[fleetManager | operator] getFleetStatistics() returns Text {
+        return "Fleet " + fleetId + " at " + locationName + 
+               " - Bikes: " + registeredBikes.size().toText() + "/" + maxCapacity.toText() + 
+               ", Revenue: $" + totalRevenue.toText() + 
+               ", Rentals: " + totalRentals.toText();
+    };
+
+    /**
+     * Gets the list of registered bike identifiers
+     * @return List of registered bike IDs
+     */
+    @api
+    permission[fleetManager | operator] getRegisteredBikes() returns List<Text> {
+        return registeredBikes;
+    };
+
+    /**
+     * Checks if a specific bike is registered in this fleet
+     * @param bikeId The bike identifier to check
+     * @return True if the bike is registered, false otherwise
+     */
+    @api
+    permission[fleetManager | operator] isBikeRegistered(bikeId: Text) returns Boolean {
+        return registeredBikes.contains(bikeId);
+    };
+
+    /**
+     * Gets the number of bikes in this fleet
+     * @return Number of bikes in this fleet
+     */
+    @api
+    permission[fleetManager | operator] getBikeCount() returns Number {
+        return registeredBikes.size();
+    };
+
+    /**
+     * Puts the fleet into maintenance mode
+     * @return Confirmation message
+     */
+    @api
+    permission[fleetManager] putFleetInMaintenance() returns Text | active {
+        become maintenance;
+        return "Fleet " + fleetId + " put in maintenance mode";
+    };
+
+    /**
+     * Restores the fleet from maintenance mode
+     * @return Confirmation message
+     */
+    @api
+    permission[fleetManager] restoreFleetFromMaintenance() returns Text | maintenance {
+        become active;
+        return "Fleet " + fleetId + " restored from maintenance mode";
+    };
+
+    /**
+     * Decommissions the fleet
+     * @return Confirmation message
+     */
+    @api
+    permission[fleetManager] decommissionFleet() returns Text | active, maintenance {
+        become decommissioned;
+        return "Fleet " + fleetId + " has been decommissioned";
+    };
+};
